@@ -1,3 +1,4 @@
+@file:JvmName("MasterCrawler")  // For gradle run task
 package com.leoleoli.douban_crawler
 
 import com.rabbitmq.client.Channel
@@ -37,6 +38,6 @@ fun main() {
 
     val channel = createChannel(rabbitMQUri)
     val photos = getAllPhotoLinks(url, publish = true, channel = channel)
-    println("Num photos on the page: ${photos.size}")
-    println("Photo links: $photos")
+    println("Successfully published ${photos.size}!")
+    channel.connection.close()
 }

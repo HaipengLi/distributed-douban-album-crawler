@@ -1,3 +1,4 @@
+@file:JvmName("SlaveCrawler")  // For gradle run task
 package com.leoleoli.douban_crawler
 
 import io.github.cdimascio.dotenv.dotenv
@@ -21,7 +22,6 @@ fun downloadAndSaveImg(src: String, folder: String) {
 }
 
 fun main() {
-
     val dotenv = dotenv()
     val rabbitMQUri = dotenv["AMQP_URI"]?: DEFAULT_URI
     val channel = createChannel(rabbitMQUri)
@@ -39,6 +39,4 @@ fun main() {
     }
     channel.basicQos(10)
     channel.basicConsume(QUEUE_NAME, false, deliverCallback, { _ -> })
-
-
 }

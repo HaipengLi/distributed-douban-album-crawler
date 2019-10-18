@@ -12,6 +12,16 @@ repositories {
     mavenCentral()
 }
 
+task(runMaster, type:JavaExec) {
+    main = 'com.leoleoli.douban_crawler.MasterCrawler'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runSlave, type:JavaExec) {
+    main = 'com.leoleoli.douban_crawler.SlaveCrawler'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.jsoup:jsoup:1.12.1'
@@ -20,6 +30,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.28'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.28'
     compile 'io.github.cdimascio:java-dotenv:5.1.3'
+    compile group: 'com.xenomachina', name: 'kotlin-argparser', version: '2.0.7'
 }
 
 compileKotlin {
