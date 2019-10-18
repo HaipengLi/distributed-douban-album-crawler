@@ -10,6 +10,8 @@ private val numPhotosselector = "#content > div.grid-16-8.clearfix > div.article
 private val metaSelector = "#content > div.grid-16-8.clearfix > div.article > div.sns-bar > div > div.sharing > div.sharing-button > div > div > span > a"
 private val albumNameAttr = "data-name"
 
+private val albumNameSelectorOnPhotoPage = "head > title"
+
 private val photosSelector1 = "#content > div.grid-16-8.clearfix > div.article > div.photolst.clearfix > div.photo_wrap"
 private val photosSelector2 = "a"
 
@@ -23,6 +25,10 @@ fun getNumPhtotsOfAlbum(doc: Document): Int {
     return numPhotosRegex.find(numPhotosDes)!!.groups[1]!!.value.toInt()
 }
 
+
+fun getAlbumNameFromPhotoPage(doc: Document): String {
+    return doc.select(albumNameSelectorOnPhotoPage).text().split("-").last()
+}
 
 fun getAlbumName(doc: Document): String {
     return doc.select(metaSelector).attr(albumNameAttr)
