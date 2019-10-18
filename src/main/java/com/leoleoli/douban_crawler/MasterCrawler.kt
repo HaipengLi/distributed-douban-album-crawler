@@ -11,7 +11,7 @@ fun getAllPhotoLinks(albumUrl: String, publish: Boolean = false, channel: Channe
         println("Processing page $url...")
         val doc = getDoc(url)
         url = getNextPageLink(doc)
-        val photoLinksOnPage = getPhtotLinks(doc)
+        val photoLinksOnPage = getPhotoLinks(doc)
         if (publish) {
             publishStringList(channel!!, photoLinksOnPage)
         }
@@ -24,12 +24,10 @@ fun getAllPhotoLinks(albumUrl: String, publish: Boolean = false, channel: Channe
 
 fun main() {
     val dotenv = dotenv()
-//    val html = object {}.javaClass.getResource("柯布西噎死你的相册-一日一画.html").readText()
-//    val doc = getDocFromString(html)
 
     val url = "https://www.douban.com/photos/album/1658301994/"
     val doc = getDoc(url)
-    val numPhotos = getNumPhtotsOfAlbum(doc)
+    val numPhotos = getNumPhotosOfAlbum(doc)
     val albumName = getAlbumName(doc)
     println("$numPhotos photos")
     println("Album name: $albumName")
