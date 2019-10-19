@@ -3,6 +3,11 @@ package com.leoleoli.douban_crawler
 
 import com.rabbitmq.client.Channel
 import io.github.cdimascio.dotenv.dotenv
+import kotlinx.cli.CommandLineInterface
+import kotlinx.cli.flagValueArgument
+import kotlinx.cli.parse
+import java.security.InvalidParameterException
+import kotlin.system.exitProcess
 
 
 fun getAllPhotoLinks(albumUrl: String, publish: Boolean = false, channel: Channel? = null): List<String> {
@@ -23,11 +28,20 @@ fun getAllPhotoLinks(albumUrl: String, publish: Boolean = false, channel: Channe
 }
 
 
-fun main() {
+fun main(args: Array<String>) {
+    val cli = CommandLineInterface("MasterCrawler")
+    val url by cli.flagValueArgument(
+        "--url", "url", "The url of the album from douban.com")
+
+    try {
+        cli.parse(args)
+    }
+    catch (e: Exception) {
+        exitProcess(1)
+    }
     val dotenv = dotenv()
 
-    val url = "https://www.douban.com/photos/album/1658301994/"
-    val doc = getDoc(url)
+    val doc = getDoc(url!!)
     val numPhotos = getNumPhotosOfAlbum(doc)
     val albumName = getAlbumName(doc)
     println("$numPhotos photos")
@@ -37,7 +51,7 @@ fun main() {
     println("Connecting to $rabbitMQUri")
 
     val channel = createChannel(rabbitMQUri)
-    val photos = getAllPhotoLinks(url, publish = true, channel = channel)
+    val photos = getAllPhotoLinks(url!!, publish = true, channel = channel)
     println("Successfully published ${photos.size}!")
     channel.connection.close()
 }

@@ -15,7 +15,7 @@ fun createChannel(url: String): Channel {
     val connection = factory.newConnection()
     val channel = connection.createChannel()
 
-    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+    channel.queueDeclare(QUEUE_NAME, false, false, false, null)
     return channel
 }
 

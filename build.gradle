@@ -10,6 +10,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 task(runMaster, type:JavaExec) {
@@ -31,6 +32,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.28'
     compile 'io.github.cdimascio:java-dotenv:5.1.3'
     compile group: 'com.xenomachina', name: 'kotlin-argparser', version: '2.0.7'
+    compile "com.github.kotlin.kotlinx~cli:kotlinx-cli-jvm:-SNAPSHOT"
 }
 
 compileKotlin {

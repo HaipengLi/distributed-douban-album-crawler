@@ -6,7 +6,11 @@ import java.net.URL
 import javax.imageio.ImageIO
 import java.io.File
 import com.rabbitmq.client.Delivery
+import kotlinx.cli.CommandLineInterface
+import kotlinx.cli.flagValueArgument
+import kotlinx.cli.parse
 import java.nio.charset.Charset
+import kotlin.system.exitProcess
 
 
 fun downloadAndSaveImg(src: String, folder: String) {
@@ -21,7 +25,17 @@ fun downloadAndSaveImg(src: String, folder: String) {
     println("Saved to $file")
 }
 
-fun main() {
+fun main(args: Array<String>) {
+    val cli = CommandLineInterface("SlaveCrawler")
+    val outputFolder by cli.flagValueArgument(
+        "--out", "outputFolder", "The folder you want to save the photos.", "out")
+
+    try {
+        cli.parse(args)
+    }
+    catch (e: Exception) {
+        exitProcess(1)
+    }
     val dotenv = dotenv()
     val rabbitMQUri = dotenv["AMQP_URI"]?: DEFAULT_URI
     val channel = createChannel(rabbitMQUri)
@@ -32,9 +46,10 @@ fun main() {
         val doc = getDoc(photoUrl)
         val imgUrl = getPhotoLink(doc)
         val albumName = getAlbumNameFromPhotoPage(doc)
+        val saveFolder = File(outputFolder, albumName)
         println(" [x] Downloading '$imgUrl'")
-        downloadAndSaveImg(imgUrl, albumName)
-        channel.basicAck(delivery.envelope.deliveryTag, false);
+        downloadAndSaveImg(imgUrl, saveFolder.path)
+        channel.basicAck(delivery.envelope.deliveryTag, false)
         Thread.sleep(1000)
     }
     channel.basicQos(10)
